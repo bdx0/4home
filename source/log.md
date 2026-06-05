@@ -2,6 +2,11 @@
 
 Append-only operational timeline for the `source/` layer.
 
+## 2026-06-05 14:46 +07
+
+- Expanded `source/index.md` with a folder guide for `core/`, `drivers/`, `config/`, and `esphome_configs/`.
+- Updated `AGENTS.md` to explain each source/reference layer folder.
+
 ## 2026-06-05 14:42 +07
 
 - Initialized `source/index.md` and `source/log.md` for source-layer navigation and audit trail.

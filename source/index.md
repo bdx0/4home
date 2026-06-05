@@ -10,6 +10,22 @@ Updated: 2026-06-05
 
 Do not place reference-only documentation here; use `../references/` for that.
 
+## Folder Guide
+
+- `core/` — lõi framework: interface driver, registry, rule engine, event bus. Code trong đây điều phối driver qua interface chung và không phụ thuộc giao thức thiết bị cụ thể.
+- `drivers/` — adapter/driver theo giao thức hoặc nền tảng thiết bị. Mỗi driver map raw API/protocol response sang state schema chung và map state command ngược về protocol gốc.
+- `config/` — cấu hình runtime: device registry và automation rules. Được phép dùng `${VAR}` để tham chiếu env; không hardcode secret.
+- `esphome_configs/` — template/cấu hình ESPHome/ESP32 để tạo node thiết bị thực.
+
+Files trực tiếp trong `source/`:
+
+- `index.md` — catalog cho source layer.
+- `log.md` — append-only timeline cho source layer.
+- `requirements.txt` — Python dependencies.
+- `.env.example` — env template safe to commit.
+- `.env` — local secrets/config only; không commit.
+- `cli.py` — entrypoint CLI khi được thêm.
+
 ## Contents
 
 ### Core

@@ -10,6 +10,18 @@ Updated: 2026-06-05
 
 Do not place runtime source code, secrets, or app config here; use `../source/` for runtime material.
 
+## Folder Guide
+
+Hiện tại `references/` là một layer phẳng, chưa tách subfolder. Khi tài liệu nhiều lên, có thể tách theo nhóm sau:
+
+- `architecture/` — thiết kế hệ thống, controller/core/driver boundaries, event/rule flow.
+- `devices/` — inventory thiết bị, model, protocol, IP/MAC/local-key status không chứa secret.
+- `protocols/` — note kỹ thuật cho MQTT, Tuya, BLE, ESPHome, Broadlink, Frigate, Miio.
+- `templates/` — template driver/config/automation dùng lại.
+- `decisions/` — quyết định thiết kế và trade-off đã chốt.
+
+Quy tắc: reference files phải giúp người/agent hiểu hoặc thiết kế hệ thống, nhưng không được là source runtime bắt buộc để app chạy.
+
 ## Contents
 
 - `driver_templates.md` — reusable driver templates and protocol examples.

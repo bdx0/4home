@@ -61,6 +61,41 @@ Không đặt source/config/runtime file rải rác ở root. Nếu cần thêm 
     └── driver_templates.md
 ```
 
+### Giải thích từng folder
+
+#### `source/`
+
+`source/` là lớp runtime/source của dự án. Mọi file cần để chạy, phát triển, test, cấu hình app hoặc driver phải nằm trong đây.
+
+- `source/core/` — lõi framework: interface driver, registry, rule engine, event bus. Code trong đây không biết chi tiết giao thức thiết bị; nó chỉ điều phối driver qua interface chung.
+- `source/drivers/` — adapter/driver theo giao thức hoặc nền tảng thiết bị. Mỗi driver map API/protocol riêng về state schema chung của 4home.
+- `source/config/` — cấu hình runtime của hệ thống, gồm registry thiết bị và automation rules. Config có thể tham chiếu env vars như `${VAR}`, không hardcode secret.
+- `source/esphome_configs/` — template/cấu hình để flash hoặc quản lý ESPHome/ESP32 nodes; vẫn là runtime material vì dùng để tạo device thực.
+- `source/index.md` — catalog hiện trạng của source layer; đọc trước khi tìm file trong `source/`.
+- `source/log.md` — timeline append-only cho thay đổi trong source layer.
+
+File nằm trực tiếp trong `source/`:
+
+- `source/cli.py` — entrypoint CLI khi có.
+- `source/requirements.txt` — dependency Python của runtime.
+- `source/.env.example` — template env safe to commit.
+- `source/.env` — local secrets/config, không commit.
+
+#### `references/`
+
+`references/` là lớp tài liệu tham khảo. Chỉ đặt tài liệu, template, note, inventory, design decision, protocol docs ở đây. Không đặt code runtime, secret, hoặc config chạy app.
+
+- `references/index.md` — catalog hiện trạng của reference layer; đọc trước khi tìm tài liệu.
+- `references/log.md` — timeline append-only cho thay đổi trong reference layer.
+- `references/driver_templates.md` — template driver và ví dụ protocol để dùng khi viết driver mới.
+
+Các tài liệu nên thêm sau:
+
+- `references/architecture.md` — kiến trúc controller/core/driver.
+- `references/device-inventory.md` — inventory thiết bị vật lý, model, protocol, IP/MAC/local-key status không chứa secret.
+- `references/protocol-notes.md` — note MQTT/Tuya/BLE/ESPHome/Broadlink/Frigate.
+- `references/automation-design.md` — design automation rules và quyết định liên quan.
+
 ## BaseDriver Interface
 
 Mọi driver PHẢI implement đúng interface này:

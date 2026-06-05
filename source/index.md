@@ -26,6 +26,26 @@ Files trực tiếp trong `source/`:
 - `.env` — local secrets/config only; không commit.
 - `cli.py` — entrypoint CLI khi được thêm.
 
+## Log Policy
+
+`source/log.md` là chronological, append-only operational timeline cho source layer: ghi những gì đã xảy ra, khi nào, và vì sao quyết định đó được đưa ra.
+
+Append khi có thay đổi ảnh hưởng đến source/runtime layer: cấu trúc, driver, core, config, dependency, test/lint/smoke pass, bug/blocker/decision.
+
+Dùng prefix nhất quán để dễ grep, theo pattern LLM Wiki upstream:
+
+```md
+## [YYYY-MM-DD] <type> | <short title> | what: <đã làm gì> | files: <file chính> | why: <lý do/decision context> | verify: <verify/blocker nếu có>
+```
+
+Ví dụ:
+
+```md
+## [2026-06-05] structure | Move runtime files under source | what: moved runtime code/config/dependencies into `source/` and kept `references/` for docs | files: `source/`, `references/` | why: keep runtime material separated from reference-only docs and avoid root-level file sprawl | verify: `source/config/devices.yaml` parses and Python files compile
+```
+
+Không ghi secret, token, local key, IP nhạy cảm, hoặc raw output dài.
+
 ## Contents
 
 ### Core

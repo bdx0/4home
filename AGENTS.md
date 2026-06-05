@@ -72,7 +72,11 @@ Không đặt source/config/runtime file rải rác ở root. Nếu cần thêm 
 - `source/config/` — cấu hình runtime của hệ thống, gồm registry thiết bị và automation rules. Config có thể tham chiếu env vars như `${VAR}`, không hardcode secret.
 - `source/esphome_configs/` — template/cấu hình để flash hoặc quản lý ESPHome/ESP32 nodes; vẫn là runtime material vì dùng để tạo device thực.
 - `source/index.md` — catalog hiện trạng của source layer; đọc trước khi tìm file trong `source/`.
-- `source/log.md` — timeline append-only cho thay đổi trong source layer.
+- `source/log.md` — chronological, append-only operational timeline cho source layer. Ghi những gì đã xảy ra, khi nào, và vì sao quyết định đó được đưa ra: thay đổi cấu trúc, driver, core, config, dependency, test/lint/smoke pass, bug/blocker/decision. Dùng prefix nhất quán để dễ grep:
+  ```md
+  ## [YYYY-MM-DD] <type> | <short title> | what: <đã làm gì> | files: <file chính> | why: <lý do/decision context> | verify: <verify/blocker nếu có>
+  ```
+  Ví dụ: `## [2026-06-05] structure | Move runtime files under source | what: moved runtime code/config/dependencies into source | files: source/, references/ | why: separate runtime from docs and avoid root sprawl | verify: devices.yaml parses, Python compiles`. Không ghi secret, token, local key, IP nhạy cảm, hoặc raw output dài.
 
 File nằm trực tiếp trong `source/`:
 

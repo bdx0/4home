@@ -1,0 +1,49 @@
+# ESPHome config template cho ESP32 mới chưa flash
+# Thay thế các giá trị trong <> rồi flash bằng: esphome run esp32_template.yaml
+
+esphome:
+  name: "<tên-thiết-bị>"          # vd: relay-kitchen, sensor-bathroom
+  friendly_name: "<Tên hiển thị>"
+
+esp32:
+  board: esp32dev                  # thay đổi nếu dùng board khác
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  ap:
+    ssid: "<tên-thiết-bị>-AP"
+
+api:
+  password: ""                     # để trống hoặc đặt password cho native API
+
+ota:
+  password: ""
+
+logger:
+
+# ── Ví dụ: Relay (ổ cắm thông minh) ─────────────────────────────────────────
+switch:
+  - platform: gpio
+    pin: GPIO26
+    name: "Relay"
+    id: relay
+
+# ── Ví dụ: Cảm biến nhiệt độ DHT22 ──────────────────────────────────────────
+# sensor:
+#   - platform: dht
+#     pin: GPIO4
+#     temperature:
+#       name: "Temperature"
+#     humidity:
+#       name: "Humidity"
+#     update_interval: 60s
+
+# ── Ví dụ: LED strip WS2812 ──────────────────────────────────────────────────
+# light:
+#   - platform: neopixelbus
+#     type: GRB
+#     variant: WS2812
+#     pin: GPIO16
+#     num_leds: 30
+#     name: "LED Strip"

@@ -1,0 +1,180 @@
+devices:
+  # ── Tuya Lights ───────────────────────────────────────────────────────────
+  # Lấy device_id và local_key từ Tuya IoT Platform:
+  #   https://iot.tuya.com → Cloud → Devices → Device Details
+  # Hoặc dùng: python -m tinytuya wizard
+
+  - id: light.living_room
+    name: Đèn phòng khách
+    type: light
+    driver: tuya
+    config:
+      device_id: ""                       # TODO
+      local_key: "${TUYA_KEY_LIVING}"
+      ip: "192.168.1.x"                   # TODO
+      version: "3.3"
+
+  - id: light.bedroom
+    name: Đèn phòng ngủ
+    type: light
+    driver: tuya
+    config:
+      device_id: ""
+      local_key: "${TUYA_KEY_BEDROOM}"
+      ip: "192.168.1.x"
+      version: "3.3"
+
+  - id: light.kitchen
+    name: Đèn bếp
+    type: light
+    driver: tuya
+    config:
+      device_id: ""
+      local_key: "${TUYA_KEY_KITCHEN}"
+      ip: "192.168.1.x"
+      version: "3.3"
+
+  - id: light.bathroom
+    name: Đèn nhà tắm
+    type: light
+    driver: tuya
+    config:
+      device_id: ""
+      local_key: "${TUYA_KEY_BATHROOM}"
+      ip: "192.168.1.x"
+      version: "3.3"
+
+  - id: light.hallway
+    name: Đèn hành lang
+    type: light
+    driver: tuya
+    config:
+      device_id: ""
+      local_key: "${TUYA_KEY_HALLWAY}"
+      ip: "192.168.1.x"
+      version: "3.3"
+
+  # ── Broadlink IR ──────────────────────────────────────────────────────────
+  # Dùng để điều khiển AC, TV, quạt qua IR
+  - id: ir.ac_living_room
+    name: Điều hòa phòng khách (IR)
+    type: ac
+    driver: broadlink
+    config:
+      ip: "192.168.1.x"        # TODO: điền IP của Broadlink RM4
+      mac: ""                   # optional
+      codes:
+        on: ""                  # TODO: học code bằng learn_code()
+        off: ""
+        temp_18: ""
+        temp_20: ""
+        temp_22: ""
+        temp_24: ""
+        temp_25: ""
+        temp_26: ""
+        mode_cool: ""
+        mode_fan: ""
+        fan_auto: ""
+        fan_low: ""
+        fan_high: ""
+
+  # ── Xiaomi BLE Sensors ────────────────────────────────────────────────────
+  # LYWSD03MMC — nhiệt độ + độ ẩm
+  - id: sensor.bedroom
+    name: Cảm biến phòng ngủ
+    type: sensor
+    driver: xiaomi_ble
+    config:
+      mac: "A4:C1:38:xx:xx:xx"  # TODO: điền MAC address
+      mode: passive
+
+  - id: sensor.living_room
+    name: Cảm biến phòng khách
+    type: sensor
+    driver: xiaomi_ble
+    config:
+      mac: "A4:C1:38:xx:xx:xx"  # TODO: điền MAC address
+      mode: passive
+
+  # ── ESP32 (ESPHome) ───────────────────────────────────────────────────────
+  # Thêm từng ESP32 sau khi flash ESPHome
+  - id: esp32.relay_1
+    name: ESP32 Relay 1
+    type: plug
+    driver: esphome
+    config:
+      host: "192.168.1.x"       # TODO: IP của ESP32
+      port: 6053
+      password: ""
+      entities:
+        relay: on               # ESPHome entity name → state field
+
+  # ── Xiaomi Air Purifier ───────────────────────────────────────────────────
+  - id: purifier.living_room
+    name: Lọc khí phòng khách
+    type: fan
+    driver: miio
+    config:
+      ip: "192.168.1.x"         # TODO: IP của máy lọc khí
+      token: "${MIIO_PURIFIER_TOKEN}"  # lấy từ Xiaomi app
+      model: ""                 # để trống để auto-detect
+
+  # ── PCs ───────────────────────────────────────────────────────────────────
+  - id: pc.main
+    name: PC chính
+    type: pc
+    driver: pc
+    config:
+      ip: "192.168.1.x"         # TODO: IP của PC
+      mac: "xx:xx:xx:xx:xx:xx"  # TODO: MAC address (cho WoL)
+      ssh_user: "dd"
+      broadcast: "192.168.1.255"
+
+  # ── Cameras (Frigate) ─────────────────────────────────────────────────────
+  - id: camera.san
+    name: Camera sân
+    type: camera
+    driver: frigate
+    config:
+      base_url: "${FRIGATE_URL}"
+      camera: "san"
+
+  - id: camera.wife
+    name: Camera vợ
+    type: camera
+    driver: frigate
+    config:
+      base_url: "${FRIGATE_URL}"
+      camera: "wife"
+
+  - id: camera.c6n
+    name: Camera c6n
+    type: camera
+    driver: frigate
+    config:
+      base_url: "${FRIGATE_URL}"
+      camera: "c6n"
+
+  - id: camera.yo1
+    name: Camera yo1
+    type: camera
+    driver: frigate
+    config:
+      base_url: "${FRIGATE_URL}"
+      camera: "yo1"
+
+  - id: camera.yo2
+    name: Camera yo2
+    type: camera
+    driver: frigate
+    config:
+      base_url: "${FRIGATE_URL}"
+      camera: "yo2"
+
+  - id: camera.yo4
+    name: Camera yo4
+    type: camera
+    driver: frigate
+    config:
+      base_url: "${FRIGATE_URL}"
+      camera: "yo4"

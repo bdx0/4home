@@ -1,0 +1,8 @@
+broadlink
+tinytuya
+bleak
+aioesphomeapi
+python-miio
+aiohttp
+pyyaml
+python-dotenv

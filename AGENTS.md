@@ -32,6 +32,8 @@ Không đặt source/config/runtime file rải rác ở root. Nếu cần thêm 
 ```
 4home/
 ├── source/
+│   ├── index.md               # Catalog cho source layer
+│   ├── log.md                 # Append-only timeline cho source layer
 │   ├── core/
 │   │   ├── base_driver.py        # Interface bắt buộc cho mọi driver
 │   │   ├── device_registry.py    # Load config, quản lý thiết bị
@@ -54,6 +56,8 @@ Không đặt source/config/runtime file rải rác ở root. Nếu cần thêm 
 │   ├── .env.example
 │   └── .env                    # local only, không commit secret
 └── references/
+    ├── index.md               # Catalog cho references layer
+    ├── log.md                 # Append-only timeline cho references layer
     └── driver_templates.md
 ```
 

@@ -22,25 +22,39 @@ Skill này giúp thiết kế, viết code, và điều khiển hệ thống sma
 
 ## Kiến trúc thư mục
 
+Root project chỉ nên có 2 thư mục chính:
+
+- `source/` — toàn bộ source code, config chạy app, entrypoint, driver, runtime template
+- `references/` — tài liệu tham khảo, template, note kỹ thuật, protocol/device docs
+
+Không đặt source/config/runtime file rải rác ở root. Nếu cần thêm file/folder mới, ưu tiên đặt vào `source/` hoặc `references/` theo đúng vai trò.
+
 ```
 4home/
-├── core/
-│   ├── base_driver.py        # Interface bắt buộc cho mọi driver
-│   ├── device_registry.py    # Load config, quản lý thiết bị
-│   ├── automation.py         # Rule engine
-│   └── event_bus.py          # Observer pattern cho state changes
-├── drivers/
-│   ├── mqtt_driver.py
-│   ├── http_driver.py
-│   ├── ws_driver.py
-│   ├── tuya_driver.py
-│   ├── ir_driver.py
-│   └── shell_driver.py
-├── config/
-│   ├── devices.yaml
-│   └── automations.yaml
-├── .env
-└── cli.py
+├── source/
+│   ├── core/
+│   │   ├── base_driver.py        # Interface bắt buộc cho mọi driver
+│   │   ├── device_registry.py    # Load config, quản lý thiết bị
+│   │   ├── automation.py         # Rule engine
+│   │   └── event_bus.py          # Observer pattern cho state changes
+│   ├── drivers/
+│   │   ├── mqtt_driver.py
+│   │   ├── http_driver.py
+│   │   ├── ws_driver.py
+│   │   ├── tuya_driver.py
+│   │   ├── ir_driver.py
+│   │   └── shell_driver.py
+│   ├── config/
+│   │   ├── devices.yaml
+│   │   └── automations.yaml
+│   ├── esphome_configs/
+│   │   └── esp32_template.yaml
+│   ├── cli.py
+│   ├── requirements.txt
+│   ├── .env.example
+│   └── .env                    # local only, không commit secret
+└── references/
+    └── driver_templates.md
 ```
 
 ## BaseDriver Interface
@@ -160,11 +174,11 @@ Hỏi người dùng:
 3. Authentication: local key, token, hay không cần?
 
 Sau đó:
-1. Tạo `drivers/<protocol>_driver.py` implement `BaseDriver`
+1. Tạo `source/drivers/<protocol>_driver.py` implement `BaseDriver`
 2. Viết `_parse_state()` — map raw API response → state schema
 3. Viết `_build_command()` — map state dict → raw API command
 4. Thêm retry với exponential backoff cho `connect()`
-5. Thêm vào `devices.yaml`
+5. Thêm vào `source/config/devices.yaml`
 
 Xem `references/driver_templates.md` để có template sẵn cho từng giao thức.
 

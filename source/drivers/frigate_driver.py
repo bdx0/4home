@@ -48,39 +48,57 @@ class FrigateDriver(BaseDriver):
             await self._session.close()
 
     async def get_state(self) -> dict:
+        """Lấy trạng thái camera từ Frigate.
+
+        Frigate exposes per-camera runtime stats via `/api/stats` under
+        `cameras.<camera_name>`; `/api/<camera>/stats` returns 404 on Frigate
+        0.15.x.
+        """
+        if self._session is None:
+            return {}
+
         try:
-            async with self._session.get(
-                f"{self._base_url}/api/{self._camera}/stats"
-            ) as r:
+            async with self._session.get(f"{self._base_url}/api/stats") as r:
                 if r.status != 200:
                     return {}
                 data = await r.json()
-                return {
-                    "streaming": True,
-                    "recording": data.get("record", {}).get("enabled", False),
-                    "rtsp_url": f"{self._base_url}/live/webrtc/api/ws?src={self._camera}",
-                    "fps": data.get("camera_fps", 0),
-                    "detection_fps": data.get("detection_fps", 0),
-                }
+
+            camera_stats = data.get("cameras", {}).get(self._camera, {})
+            if not camera_stats:
+                return {}
+
+            recording = False
+            try:
+                async with self._session.get(f"{self._base_url}/api/config") as r:
+                    if r.status == 200:
+                        config = await r.json()
+                        camera_config = config.get("cameras", {}).get(self._camera, {})
+                        recording = bool(
+                            camera_config.get("record", {}).get("enabled", False)
+                        )
+            except Exception:
+                # Runtime stats are still useful even if config is unavailable.
+                pass
+
+            camera_fps = camera_stats.get("camera_fps", 0) or 0
+            process_fps = camera_stats.get("process_fps", 0) or 0
+            return {
+                "streaming": bool(camera_fps or process_fps),
+                "recording": recording,
+                "rtsp_url": f"{self._base_url}/live/webrtc/api/ws?src={self._camera}",
+                "fps": camera_fps,
+                "detection_fps": camera_stats.get("detection_fps", 0),
+                "detection": bool(camera_stats.get("detection_enabled", False)),
+            }
         except Exception as e:
             print(f"[{self.device_id}] get_state error: {e}")
             return {}
 
     async def set_state(self, state: dict) -> bool:
-        # Frigate hỗ trợ bật/tắt recording và detection
-        try:
-            if "recording" in state:
-                await self._session.post(
-                    f"{self._base_url}/api/{self._camera}/recordings/toggle"
-                )
-            if "detection" in state:
-                await self._session.post(
-                    f"{self._base_url}/api/{self._camera}/detect/toggle"
-                )
-            return True
-        except Exception as e:
-            print(f"[{self.device_id}] set_state error: {e}")
-            return False
+        # Current Frigate API discovery did not expose safe recording/detection
+        # mutation endpoints. Avoid pretending a state change succeeded.
+        print(f"[{self.device_id}] set_state unsupported for Frigate camera: {state}")
+        return False
 
     async def on_state_change(self, callback: Callable[[dict], Awaitable[None]]):
         pass

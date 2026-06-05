@@ -2,6 +2,8 @@
 
 Append-only operational timeline for the `source/` layer.
 
+## [2026-06-05] driver | Fix Frigate camera state | what: updated `FrigateDriver.get_state()` to read per-camera runtime stats from `/api/stats` and report recording/detection fields from Frigate config/stats | files: `source/drivers/frigate_driver.py`, `source/log.md` | why: `/api/<camera>/stats` returns 404 on Frigate 0.15.x, causing camera state to be empty even though snapshots work | verify: smoke-tested `camera.san` connect/state/snapshot against Frigate with stream URL redacted
+
 ## [2026-06-05] docs | Align source log format with LLM Wiki gist
 - Simplified `source/log.md` policy in `AGENTS.md` and `source/index.md` to follow Karpathy gist: chronological append-only timeline with a consistent grep-friendly prefix.
 - Replaced rigid `Files/Reason/Change/Verify/Blockers` format with `## [YYYY-MM-DD] <type> | <short title>` plus 1-3 summary bullets.
